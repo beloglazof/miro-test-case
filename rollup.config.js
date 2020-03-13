@@ -11,8 +11,9 @@ export default {
 	output: {
 		sourcemap: true,
 		format: 'iife',
-		name: 'app',
-		file: 'public/build/bundle.js'
+		name: 'emailsInput',
+		file: 'public/build/bundle.js',
+		exports: 'named'
 	},
 	plugins: [
 		svelte({
@@ -22,7 +23,8 @@ export default {
 			// a separate file - better for performance
 			css: css => {
 				css.write('public/build/bundle.css');
-			}
+			},
+			customElement: true
 		}),
 
 		// If you have external dependencies installed from

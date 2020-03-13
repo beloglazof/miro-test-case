@@ -1,7 +1,17 @@
-import App from './App.svelte';
+import EmailsInput from './EmailsInput.svelte';
+import { emails as emailsStore } from './emailsStore';
+import { get } from 'svelte/store';
 
-const app = new App({
-	target: document.body,
-});
+export function getEmails() {
+  return get(emailsStore);
+}
 
-export default app;
+export function replaceEmails(newEmails) {
+  emailsStore.set(newEmails);
+}
+
+export function onEmailsChange(cb) {
+  emailsStore.subscribe(cb);
+}
+
+export default EmailsInput;
