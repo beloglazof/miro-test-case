@@ -1,5 +1,5 @@
 import EmailsInput from './EmailsInput.svelte';
-import { emails as emailsStore } from './emailsStore';
+import { emailsStore } from './emailsStore';
 import { get } from 'svelte/store';
 
 export function getEmails() {

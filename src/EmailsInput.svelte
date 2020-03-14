@@ -1,23 +1,28 @@
 <script>
-  import { emails } from "./emailsStore";
+  import { emailsStore } from "./emailsStore";
+
   let inputValue;
 
-  let initialPlaceholder = "Enter email adresses...";
-  let processPlaceholder = "add more people...";
-  $: placeholder = $emails.length > 0 ? processPlaceholder : initialPlaceholder;
-
-  function handleInputValue() {
+  function addEmail() {
     const email = inputValue.trim();
     const validEmail = email.includes("@");
 
     if (email) {
-      emails.update(emails => [...emails, { value: email, valid: validEmail }]);
+      emailsStore.update(emails => [...emails, { value: email, valid: validEmail }]);
       inputValue = "";
     }
   }
 
-  function handleRemove(email) {
-    emails.update(emails => emails.filter(e => e.value !== email));
+  function removeEmail(email) {
+    emailsStore.update(emails => emails.filter(e => e.value !== email));
+  }
+
+  function removeLastEmail() {
+    emailsStore.update(emails => {
+      const emailsCopy = [...emails];
+      emailsCopy.pop();
+      return emailsCopy;
+    });
   }
 
   function handleKeyDown(event) {
@@ -26,20 +31,20 @@
       case "Tab":
       case ",":
         event.preventDefault();
-        handleInputValue();
+        addEmail();
         break;
       case "Backspace":
-        emails.update(emails => {
-          const emailsCopy = [...emails];
-          emailsCopy.pop();
-          return emailsCopy;
-        });
-        console.log($emails);
+        removeLastEmail();
         break;
       default:
         break;
     }
   }
+
+  let initialPlaceholder = "Enter email adresses...";
+  let processPlaceholder = "add more people...";
+  $: placeholder = $emailsStore.length > 0 ? processPlaceholder : initialPlaceholder;
+
 </script>
 
 <style>
@@ -89,8 +94,8 @@
 
 <svelte:options tag="emails-input" />
 <div class="input-wrapper">
-  {#if $emails.length > 0}
-    {#each $emails as email, i}
+  {#if $emailsStore.length > 0}
+    {#each $emailsStore as email, i}
       <span
         class="email-chip"
         class:email-valid={email.valid}
@@ -99,7 +104,7 @@
         <span
           class="delete-email-button"
           role="button"
-          on:click={() => handleRemove(email.value)}>
+          on:click={() => removeEmail(email.value)}>
           ×
         </span>
       </span>
@@ -111,5 +116,5 @@
     {placeholder}
     bind:value={inputValue}
     on:keydown={handleKeyDown}
-    on:blur={handleInputValue} />
+    on:blur={addEmail} />
 </div>
