@@ -1,14 +1,44 @@
 <script>
-  import { emailsStore } from "./emailsStore";
+  import { writable, get } from "svelte/store";
+
+  const emailsStore = writable([]);
+
+  export function getEmails() {
+    return get(emailsStore);
+  }
+
+  export function replaceEmails(newEmails) {
+    emailsStore.set(newEmails);
+  }
+
+  export function onEmailsChange(cb) {
+    emailsStore.subscribe(cb);
+  }
 
   let inputValue;
 
-  function addEmail() {
-    const email = inputValue.trim();
+  function handleInput(value) {
+    let trimmedValue;
+    if (value) {
+      trimmedValue = value.trim();
+    } else if (inputValue) {
+      trimmedValue = inputValue.trim();
+    } else {
+      return;
+    }
+
+    addEmail(trimmedValue);
+  }
+
+  function addEmail(email) {
     const validEmail = email.includes("@");
 
     if (email) {
-      emailsStore.update(emails => [...emails, { value: email, valid: validEmail }]);
+      emailsStore.update(emails => [
+        ...emails,
+        { value: email, valid: validEmail }
+      ]);
+
       inputValue = "";
     }
   }
@@ -27,11 +57,13 @@
 
   function handleKeyDown(event) {
     switch (event.key) {
-      case "Enter":
       case "Tab":
       case ",":
+        handleInput();
+        break;
+      case "Enter":
         event.preventDefault();
-        addEmail();
+        handleInput();
         break;
       case "Backspace":
         removeLastEmail();
@@ -41,10 +73,25 @@
     }
   }
 
+  function getClipboardData(event) {
+    if (event.clipboardData) {
+      return event.clipboardData.getData("text/plain");
+    }
+
+    return "";
+  }
+
+  function handlePaste(event) {
+    event.preventDefault();
+
+    const data = getClipboardData(event);
+    data.split(",").map(handleInput);
+  }
+
   let initialPlaceholder = "Enter email adresses...";
   let processPlaceholder = "add more people...";
-  $: placeholder = $emailsStore.length > 0 ? processPlaceholder : initialPlaceholder;
-
+  $: placeholder =
+    $emailsStore.length > 0 ? processPlaceholder : initialPlaceholder;
 </script>
 
 <style>
@@ -70,6 +117,9 @@
   .input-wrapper {
     display: flex;
     align-items: center;
+    min-height: 40px;
+    max-height: 96px;
+    overflow-y: auto;
     background-color: #fff;
     border: 1px solid #c3c2cf;
     border-radius: 4px;
@@ -81,7 +131,6 @@
     display: inline-flex;
     max-width: 100%;
     flex-grow: 1;
-    min-height: 40px;
     font-family: "Open Sans", sans-serif;
     font-size: 14px;
     line-height: 24px;
@@ -92,7 +141,6 @@
   }
 </style>
 
-<svelte:options tag="emails-input" />
 <div class="input-wrapper">
   {#if $emailsStore.length > 0}
     {#each $emailsStore as email, i}
@@ -116,5 +164,7 @@
     {placeholder}
     bind:value={inputValue}
     on:keydown={handleKeyDown}
-    on:blur={addEmail} />
+    on:blur={() => handleInput()}
+    on:paste={handlePaste} />
+
 </div>

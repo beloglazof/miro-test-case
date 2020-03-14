@@ -9,12 +9,29 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/global.css" />
     <link rel="stylesheet" href="/build/bundle.css" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
 
-    <script defer src="/build/bundle.js"></script>
+    <script src="/build/bundle.js"></script>
   </head>
 
   <body>
-    <emails-input></emails-input>
+    <div id="emails-input"></div>
+    <div id="team-emails-input"></div>
+    <script>
+      const EmailsInput = emailsInput.default;
+      const bodyInput = new EmailsInput({
+        target: document.body,
+      });
+
+      const emailsInputComponent = new EmailsInput({
+        target: document.querySelector('#emails-input'),
+      });
+      const teamEmailsInputComponent = new EmailsInput({
+        target: document.querySelector('#team-emails-input'),
+      });
+    </script>
   </body>
 </html>
