@@ -21,9 +21,23 @@
   }
 
   function handleKeyDown(event) {
-    if (["Enter", "Tab", ","].includes(event.key)) {
-      event.preventDefault();
-      handleInputValue();
+    switch (event.key) {
+      case "Enter":
+      case "Tab":
+      case ",":
+        event.preventDefault();
+        handleInputValue();
+        break;
+      case "Backspace":
+        emails.update(emails => {
+          const emailsCopy = [...emails];
+          emailsCopy.pop();
+          return emailsCopy;
+        });
+        console.log($emails);
+        break;
+      default:
+        break;
     }
   }
 </script>
