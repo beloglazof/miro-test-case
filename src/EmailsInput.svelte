@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import { writable, get } from "svelte/store";
 
   const emailsStore = writable([]);
@@ -66,7 +67,9 @@
         handleInput();
         break;
       case "Backspace":
-        removeLastEmail();
+        if (!inputValue.length) {
+          removeLastEmail();
+        }
         break;
       default:
         break;
@@ -82,10 +85,12 @@
   }
 
   function handlePaste(event) {
-    event.preventDefault();
-
     const data = getClipboardData(event);
     data.split(",").map(handleInput);
+  }
+
+  function setFocusOnInput(event) {
+    event.target.lastElementChild.focus();
   }
 
   let initialPlaceholder = "Enter email adresses...";
@@ -100,6 +105,7 @@
     padding-left: 10px;
     padding-right: 8px;
     margin-right: 8px;
+    margin-bottom: 4px;
   }
 
   .email-valid {
@@ -115,10 +121,8 @@
     cursor: pointer;
   }
   .input-wrapper {
-    display: flex;
-    align-items: center;
-    min-height: 40px;
     max-height: 96px;
+    height: 80px;
     overflow-y: auto;
     background-color: #fff;
     border: 1px solid #c3c2cf;
@@ -141,7 +145,7 @@
   }
 </style>
 
-<div class="input-wrapper">
+<div class="input-wrapper" on:click={setFocusOnInput}>
   {#if $emailsStore.length > 0}
     {#each $emailsStore as email, i}
       <span
@@ -165,6 +169,6 @@
     bind:value={inputValue}
     on:keydown={handleKeyDown}
     on:blur={() => handleInput()}
-    on:paste={handlePaste} />
+    on:paste|preventDefault={handlePaste} />
 
 </div>

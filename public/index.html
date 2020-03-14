@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/global.css" />
     <link rel="stylesheet" href="/build/bundle.css" />
     <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap"
       rel="stylesheet"
     />
 
@@ -18,19 +18,25 @@
   </head>
 
   <body>
-    <div id="emails-input"></div>
-    <div id="team-emails-input"></div>
+    <div class="share-form-wrapper">
+      <form class="share-form">
+        <header class="share-form-header">
+          <div class="share-form-title">
+            Share <span class="board-name">Board name</span> with others
+          </div>
+        </header>
+        <div id="emails-input"></div>
+        <footer class="share-form-footer">
+          <button class="button">Add email</button>
+          <button class="button">Get emails count</button>
+        </footer>
+      </form>
+    </div>
     <script>
       const EmailsInput = emailsInput.default;
-      const bodyInput = new EmailsInput({
-        target: document.body,
-      });
 
       const emailsInputComponent = new EmailsInput({
         target: document.querySelector('#emails-input'),
-      });
-      const teamEmailsInputComponent = new EmailsInput({
-        target: document.querySelector('#team-emails-input'),
       });
     </script>
   </body>
