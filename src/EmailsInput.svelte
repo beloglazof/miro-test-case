@@ -102,13 +102,13 @@
 <style>
   .email-chip {
     display: inline-flex;
-    padding-left: 10px;
-    padding-right: 8px;
     margin-right: 8px;
     margin-bottom: 4px;
   }
 
   .email-valid {
+    padding-left: 10px;
+    padding-right: 8px;
     border-radius: 100px;
     background-color: rgba(102, 153, 255, 0.2);
   }
@@ -157,7 +157,7 @@
           class="delete-email-button"
           role="button"
           on:click={() => removeEmail(email.value)}>
-          ×
+          ⨯
         </span>
       </span>
     {/each}
