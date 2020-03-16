@@ -145,7 +145,7 @@
   }
 </style>
 
-<div class="input-wrapper" on:click={setFocusOnInput}>
+<div class="input-wrapper" on:click|self={setFocusOnInput}>
   {#if $emailsStore.length > 0}
     {#each $emailsStore as email, i}
       <span
