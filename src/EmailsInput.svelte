@@ -8,12 +8,19 @@
   }
 
   export function replaceEmails(newEmails = []) {
-    const validatedEmails = newEmails.map(validateEmail);
-    emailsStore.set(validatedEmails);
+    if (newEmails instanceof Array) {
+      const validatedEmails = newEmails.map(validateEmail);
+      emailsStore.set(validatedEmails);
+    }
   }
 
-  export function onEmailsChange(cb) {
-    emailsStore.subscribe(cb);
+  export function onEmailsChange(callback) {
+    if (typeof callback !== "function") {
+      console.error("Callback must be a function");
+      return;
+    }
+
+    emailsStore.subscribe(callback);
   }
 
   let inputValue;
@@ -33,6 +40,10 @@
   }
 
   function validateEmail(value) {
+    if (typeof value !== "string") {
+      console.error("Email must be a string");
+      return;
+    }
     // general email regex from RFC 5322
     const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const valid = emailRegEx.test(value);
@@ -44,7 +55,12 @@
     if (!email) {
       return;
     }
+
     const validatedEmail = validateEmail(email);
+    if (validatedEmail === undefined) {
+      return;
+    }
+
     emailsStore.update(emails => [...emails, validatedEmail]);
   }
 
@@ -63,9 +79,9 @@
   function handleKeyDown(event) {
     switch (event.key) {
       case "Tab":
-      case ",":
         handleInput();
         break;
+      case ",":
       case "Enter":
         event.preventDefault();
         handleInput();
