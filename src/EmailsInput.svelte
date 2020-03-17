@@ -69,7 +69,7 @@
         handleInput();
         break;
       case "Backspace":
-        if (!inputValue.length) {
+        if (!inputValue || inputValue.length === 0) {
           removeLastEmail();
         }
         break;
