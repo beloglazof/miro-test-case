@@ -11,9 +11,8 @@ export default {
   output: {
     sourcemap: true,
     format: 'iife',
-    name: 'emailsInput',
-    file: 'public/build/bundle.js',
-    exports: 'named',
+    name: 'EmailsInput',
+    file: 'public/build/emailsInput.js',
   },
   plugins: [
     svelte({
@@ -22,7 +21,7 @@ export default {
       // we'll extract any component CSS out into
       // a separate file - better for performance
       css: css => {
-        css.write('public/build/bundle.css');
+        css.write('public/build/emailsInput.css');
       },
     }),
 

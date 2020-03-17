@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    <title>Svelte app</title>
+    <title>Share form</title>
 
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="stylesheet" href="/global.css" />
-    <link rel="stylesheet" href="/build/bundle.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap"
       rel="stylesheet"
     />
-
-    <script src="/build/bundle.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/index.css" />
+    
+    <link rel="stylesheet" href="/build/emailsInput.css" />
+    <script src="/build/emailsInput.js"></script>
   </head>
 
   <body>
@@ -42,8 +42,6 @@
     </div>
     <script>
       'use strict';
-
-      var EmailsInput = emailsInput.default;
 
       var emailsInputNode = document.querySelector('#emails-input');
       var emailsInputComponent = new EmailsInput({
