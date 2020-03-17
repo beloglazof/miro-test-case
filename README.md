@@ -1,93 +1,118 @@
-*Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# Emails Input
 
----
+Emails input component writing with Svelte.
 
-# svelte app
+## Live demo
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+https://miro-test-case.now.sh/
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+## Local demo
 
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
-
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
-
-Install the dependencies...
+1. Clone project
 
 ```bash
-cd svelte-app
-npm install
+git clone https://github.com/beloglazof/miro-test-case.git
 ```
 
-...then start [Rollup](https://rollupjs.org):
+2. Start [Rollup](https://rollupjs.org):
 
 ```bash
-npm run dev
+npm run start
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+3. Navigate to [localhost:5000](http://localhost:5000). You should see demo app running.
 
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
+## Usage
 
+Import `js` and `css` component files in html. By default they are in `public/build`
 
-## Building and running in production mode
+```html
+<head>
+  <!-- useful meta and other tags -->
 
-To create an optimised version of the app:
-
-```bash
-npm run build
+  <link rel="stylesheet" href="/path/to/emailsInput.css" />
+  <script src="/path/to/emailsInput.js"></script>
+</head>
 ```
 
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
+Markup node for component
 
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
+```html
+<div id="emails-input"></div>
 ```
 
+Mount component in node
 
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
+```html
+<script>
+  var emailsInputNode = document.querySelector('#emails-input');
+  var emailsInputComponent = new EmailsInput({
+    target: emailsInputNode,
+  });
+</script>
 ```
 
-Then, from within your project folder:
+You can make several instance of component
 
-```bash
-cd public
-now deploy --name my-project
+```html
+<script>
+  var emailsInputNode = document.querySelector('#emails-input');
+  var emailsInputComponent = new EmailsInput({
+    target: emailsInputNode,
+  });
+
+  // some code
+
+  var teamEmailsInputNode = document.querySelector('#team-emails-input');
+  var teamEmailsInputComponent = new EmailsInput({
+    target: teamEmailsInputNode,
+  });
+</script>
 ```
 
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
+Component instance has useful API
 
-### With [surge](https://surge.sh/)
+## Component API
 
-Install `surge` if you haven't already:
+### `getEmails`
 
-```bash
-npm install -g surge
+This method return all entered emails.
+
+Example:
+
+```javascript
+var getEmails = emailsInputComponent.getEmails;
+var emails = getEmails(); // [{value: 'mike@miro.com', valid: true}]
 ```
 
-Then, from within your project folder:
+### `replaceEmails`
 
-```bash
-npm run build
-surge public my-project.surge.sh
+Parameter:
+
+- `emails` - array of string
+
+This method replace all entered emails with new ones.
+
+Example:
+
+```javascript
+var replaceEmails = emailsInputComponent.replaceEmails;
+replaceEmails(['hop', 'hey']);
+```
+
+### `onEmailsChange`
+
+Parameters:
+
+- `callback` - function
+
+This method subscribes for emails list changes and fire callback function when it happen
+
+Example:
+
+```javascript
+var onEmailsChange = emailsInputComponent.onEmailsChange;
+onEmailsChange(function() {
+  console.log('Emails list changed!');
+});
 ```
