@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import { writable, get } from "svelte/store";
 
   const emailsStore = writable([]);
