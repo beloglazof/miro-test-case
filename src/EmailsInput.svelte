@@ -33,7 +33,9 @@
   }
 
   function validateEmail(value) {
-    const valid = value.includes("@");
+    // general email regex from RFC 5322
+    const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const valid = emailRegEx.test(value);
     const email = { value, valid };
     return email;
   }
