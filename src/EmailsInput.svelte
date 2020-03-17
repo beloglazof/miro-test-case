@@ -8,8 +8,9 @@
     return get(emailsStore);
   }
 
-  export function replaceEmails(newEmails) {
-    emailsStore.set(newEmails);
+  export function replaceEmails(newEmails = []) {
+    const validatedEmails = newEmails.map(validateEmail);
+    emailsStore.set(validatedEmails);
   }
 
   export function onEmailsChange(cb) {
@@ -24,6 +25,7 @@
       trimmedValue = value.trim();
     } else if (inputValue) {
       trimmedValue = inputValue.trim();
+      inputValue = "";
     } else {
       return;
     }
@@ -31,17 +33,18 @@
     addEmail(trimmedValue);
   }
 
+  function validateEmail(value) {
+    const valid = value.includes("@");
+    const email = { value, valid };
+    return email;
+  }
+
   function addEmail(email) {
-    const validEmail = email.includes("@");
-
-    if (email) {
-      emailsStore.update(emails => [
-        ...emails,
-        { value: email, valid: validEmail }
-      ]);
-
-      inputValue = "";
+    if (!email) {
+      return;
     }
+    const validatedEmail = validateEmail(email);
+    emailsStore.update(emails => [...emails, validatedEmail]);
   }
 
   function removeEmail(email) {
@@ -101,7 +104,8 @@
 
 <style>
   .email-chip {
-    display: inline-flex;
+    display: inline-block;
+    height: 24px;
     margin-right: 8px;
     margin-bottom: 4px;
   }
@@ -117,11 +121,13 @@
   }
 
   .delete-email-button {
-    margin-left: 8px;
+    margin-left: 2px;
+    width: 8px;
+    height: 8px;
     cursor: pointer;
   }
   .input-wrapper {
-    max-height: 96px;
+    max-height: 80px;
     height: 80px;
     overflow-y: auto;
     background-color: #fff;
@@ -157,7 +163,7 @@
           class="delete-email-button"
           role="button"
           on:click={() => removeEmail(email.value)}>
-          ⨯
+          ✕
         </span>
       </span>
     {/each}
